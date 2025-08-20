@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-class AppColors {
-  AppColors._();
+class AppConstants{
+  AppConstants._();
   
   static const primaryColor = Color(0xFF009245);
+  static const String fontFamily = 'Poppins';
 }
