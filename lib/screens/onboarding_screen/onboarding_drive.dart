@@ -1,3 +1,4 @@
+import 'package:donoridedrive/screens/location_access/location_access_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:donoridedrive/constants/App_constant.dart';
 
@@ -70,7 +71,10 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   }
 
   void _completeOnboarding() {
-    print("Onboarding completed!");
+    Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => LocationAccessScreen()),
+  );
   }
 
   @override
@@ -131,7 +135,6 @@ class OnboardingScreen extends StatelessWidget {
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                         color: AppConstants.primaryColor,
-                        fontFamily: AppConstants.fontFamily,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -143,7 +146,6 @@ class OnboardingScreen extends StatelessWidget {
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                         color: Colors.black,
-                        fontFamily: AppConstants.fontFamily,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -155,7 +157,6 @@ class OnboardingScreen extends StatelessWidget {
                         fontSize: 14,
                         color: Colors.black,
                         height: 1.5,
-                        fontFamily: AppConstants.fontFamily,
                       ),
                       textAlign: TextAlign.center,
                     ),

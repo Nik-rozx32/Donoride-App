@@ -119,7 +119,6 @@ class _SplashScreenState extends State<SplashScreen>
                       child: Text(
                         'dono ride',
                         style: TextStyle(
-                          fontFamily: AppConstants.fontFamily,
                           fontSize: 35,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
