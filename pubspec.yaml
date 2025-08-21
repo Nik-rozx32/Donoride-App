@@ -64,6 +64,8 @@ flutter:
     - lib/assets/onboarding-images/onboarding_1.png
     - lib/assets/onboarding-images/onboarding_2.png
     - lib/assets/onboarding-images/onboarding_3.png
+    - lib/assets/location_access/location_access.png
+    - lib/assets/login/loginPg.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
