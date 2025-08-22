@@ -1,8 +1,78 @@
 import 'package:donoridedrive/constants/App_constant.dart';
+import 'package:donoridedrive/screens/otp/otp_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _phoneController = TextEditingController();
+  bool _isValidPhoneNumber = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _phoneController.addListener(_validatePhoneNumber);
+  }
+
+  @override
+  void dispose() {
+    _phoneController.removeListener(_validatePhoneNumber);
+    _phoneController.dispose();
+    super.dispose();
+  }
+
+  void _validatePhoneNumber() {
+    String phoneNumber = _phoneController.text.trim();
+    bool isValid =
+        phoneNumber.length == 10 &&
+        phoneNumber.isNotEmpty &&
+        RegExp(r'^[0-9]+$').hasMatch(phoneNumber);
+
+    if (_isValidPhoneNumber != isValid) {
+      setState(() {
+        _isValidPhoneNumber = isValid;
+      });
+    }
+  }
+
+  void _sendOTP() {
+    Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => 
+              OtpScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            // Slide + Fade transition
+            const begin = Offset(1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.easeInOut;
+
+            var slideTween = Tween(begin: begin, end: end).chain(
+              CurveTween(curve: curve),
+            );
+
+            var fadeAnimation = animation.drive(
+              CurveTween(curve: curve),
+            );
+
+            return FadeTransition(
+              opacity: fadeAnimation,
+              child: SlideTransition(
+                position: animation.drive(slideTween),
+                child: child,
+              ),
+            );
+          },
+          transitionDuration: const Duration(milliseconds: 600),
+        ),
+      );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +109,12 @@ class LoginScreen extends StatelessWidget {
               SizedBox(
                 height: 200,
                 child: Image.asset(
-                  "lib/assets/login/loginPg.png",
+                  "lib/assets/login/login.jpg",
                   fit: BoxFit.contain,
                 ),
               ),
 
-              Spacer(),
+              const Spacer(),
 
               const Align(
                 alignment: Alignment.center,
@@ -56,18 +126,20 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 12),
 
               TextField(
+                controller: _phoneController,
                 keyboardType: TextInputType.phone,
+                maxLength: 10,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(10),
+                ],
                 decoration: InputDecoration(
                   prefixIcon: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: const [
-                        Icon(
-                          Icons.phone_android,
-                          size: 20,
-                          color: Colors.black54,
-                        ),
+                        Icon(Icons.phone, size: 20, color: Colors.black54),
                         SizedBox(width: 6),
                         Text(
                           "+91",
@@ -77,6 +149,7 @@ class LoginScreen extends StatelessWidget {
                             color: Colors.black,
                           ),
                         ),
+                        SizedBox(width: 8),
                       ],
                     ),
                   ),
@@ -85,29 +158,59 @@ class LoginScreen extends StatelessWidget {
                     minHeight: 0,
                   ),
                   hintText: "936 353 9927",
+                  hintStyle: const TextStyle(color: Colors.grey),
                   filled: true,
                   fillColor: Colors.white,
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: 16.0,
                     horizontal: 12.0,
                   ),
+                  counterText: "",
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: Colors.grey, 
-                      width: 1
+                    borderSide: BorderSide(
+                      color:
+                          _phoneController.text.isNotEmpty &&
+                              !_isValidPhoneNumber
+                          ? Colors.red
+                          : Colors.grey,
+                      width: 1,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: AppConstants.primaryColor, 
-                      width: 1.2
+                    borderSide: BorderSide(
+                      color: _isValidPhoneNumber
+                          ? AppConstants.primaryColor
+                          : _phoneController.text.isNotEmpty
+                          ? Colors.red
+                          : AppConstants.primaryColor,
+                      width: 1.2,
                     ),
                   ),
-                  
+                  suffixIcon: _phoneController.text.isNotEmpty
+                      ? Icon(
+                          _isValidPhoneNumber
+                              ? Icons.check_circle
+                              : Icons.error,
+                          color: _isValidPhoneNumber
+                              ? Colors.green
+                              : Colors.red,
+                          size: 20,
+                        )
+                      : null,
                 ),
               ),
+
+              if (_phoneController.text.isNotEmpty && !_isValidPhoneNumber)
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(top: 8),
+                  child: const Text(
+                    "Please enter a valid 10-digit phone number",
+                    style: TextStyle(color: Colors.red, fontSize: 12),
+                  ),
+                ),
 
               const SizedBox(height: 20),
 
@@ -115,14 +218,18 @@ class LoginScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: _isValidPhoneNumber ? _sendOTP : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppConstants.primaryColor,
-                    foregroundColor: Colors.white,
+                    backgroundColor: _isValidPhoneNumber
+                        ? AppConstants.primaryColor
+                        : Colors.grey.shade300,
+                    foregroundColor: _isValidPhoneNumber
+                        ? Colors.white
+                        : Colors.grey.shade600,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    elevation: 2,
+                    elevation: _isValidPhoneNumber ? 2 : 0,
                   ),
                   child: const Text(
                     "Send OTP",
@@ -170,6 +277,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
+              const Spacer(),
             ],
           ),
         ),
