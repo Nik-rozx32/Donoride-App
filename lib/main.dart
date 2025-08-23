@@ -1,5 +1,6 @@
-import 'package:donoridedrive/screens/spalsh_screen.dart';
+import 'package:donoridedrive/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
@@ -13,9 +14,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      home:SplashScreen(),
       theme: ThemeData(
-        textTheme: GoogleFonts.poppinsTextTheme(), // Apply Poppins globally
+        textTheme: GoogleFonts.poppinsTextTheme(), 
       ),
     );
   }
