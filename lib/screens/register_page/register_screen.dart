@@ -1,4 +1,5 @@
 import 'package:donoridedrive/constants/App_constant.dart';
+import 'package:donoridedrive/screens/vehicle_registration/vehicle_registration_form.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -11,7 +12,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
   final _emailController = TextEditingController();
-  String? _selectedGender; 
+  String? _selectedGender;
 
   @override
   void dispose() {
@@ -21,25 +22,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     super.dispose();
   }
 
-  
   bool _isValidPhoneNumber(String phone) {
-    
     String cleanPhone = phone.replaceAll(RegExp(r'[^\d]'), '');
-    
-    
+
     if (cleanPhone.length < 10 || cleanPhone.length > 15) {
       return false;
     }
-    
-    
+
     return RegExp(r'^\d+$').hasMatch(cleanPhone);
   }
 
-  
   bool _isValidEmail(String email) {
-    
     return RegExp(
-      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
     ).hasMatch(email.trim());
   }
 
@@ -53,7 +48,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           child: Column(
             children: [
               SizedBox(height: 60),
-              
+
               Column(
                 children: [
                   Text(
@@ -74,14 +69,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                 ],
               ),
-              
+
               SizedBox(height: 50),
-              
+
               Form(
                 key: _formKey,
                 child: Column(
                   children: [
-                    
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -123,10 +117,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         },
                       ),
                     ),
-                    
+
                     SizedBox(height: 20),
-                    
-                    
+
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -169,10 +162,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         },
                       ),
                     ),
-                    
+
                     SizedBox(height: 20),
-                    
-                    
+
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -215,10 +207,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         },
                       ),
                     ),
-                    
+
                     SizedBox(height: 20),
-                    
-                    
+
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -249,8 +240,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             vertical: 18,
                           ),
                         ),
-                        items: ['Male', 'Female', 'Other']
-                            .map((String value) {
+                        items: ['Male', 'Female', 'Other'].map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
@@ -269,22 +259,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         },
                       ),
                     ),
-                    
+
                     SizedBox(height: 40),
-                    
-                    
+
                     Container(
                       width: double.infinity,
                       height: 56,
                       child: ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            
-                            print('Name: ${_nameController.text}');
-                            print('Phone: ${_phoneController.text}');
-                            print('Email: ${_emailController.text}');
-                            print('Gender: $_selectedGender');
-                            
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text('Registration successful!'),
@@ -292,8 +275,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 duration: Duration(seconds: 2),
                               ),
                             );
-                            
-                            
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => VehicleDetailsForm(),
+                              ),
+                            );
+
                             _nameController.clear();
                             _phoneController.clear();
                             _emailController.clear();
@@ -319,7 +307,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                       ),
                     ),
-                    
+
                     SizedBox(height: 30),
                     Divider(),
                     Padding(
