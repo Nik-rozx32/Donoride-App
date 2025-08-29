@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:donoridedrive/screens/onboarding_screen/onboarding_drive.dart';
 import 'package:flutter/material.dart';
-import '../constants/App_constant.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
