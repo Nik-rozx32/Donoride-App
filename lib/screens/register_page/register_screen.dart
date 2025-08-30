@@ -1,5 +1,5 @@
 import 'package:donoridedrive/constants/App_constant.dart';
-import 'package:donoridedrive/screens/vehicle_registration/vehicle_registration_form.dart';
+import 'package:donoridedrive/screens/vehicle_registration_details/vehicle_registration_form.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationScreen extends StatefulWidget {
