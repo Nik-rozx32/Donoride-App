@@ -1,5 +1,6 @@
 import 'package:donoridedrive/constants/App_constant.dart';
-import 'package:donoridedrive/screens/vehicle_registration_details/vehicel_registration_questions.dart';
+import 'package:donoridedrive/screens/vehicle_registration_details/question_form/question_model.dart';
+import 'package:donoridedrive/screens/vehicle_registration_details/question_form/vehicle_registration_questions.dart';
 import 'package:flutter/material.dart';
 
 class VehicleDetailsForm extends StatefulWidget {
@@ -86,6 +87,8 @@ class _VehicleDetailsFormState extends State<VehicleDetailsForm>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
+      
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: AnimatedBuilder(
           animation: Listenable.merge([
@@ -98,10 +101,17 @@ class _VehicleDetailsFormState extends State<VehicleDetailsForm>
               opacity: _fadeAnimation,
               child: SlideTransition(
                 position: _slideAnimation,
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
+                child: SingleChildScrollView( 
+                  
+                  padding: EdgeInsets.only(
+                    left: 24.0,
+                    right: 24.0,
+                    top: 24.0,
+                    bottom: MediaQuery.of(context).viewInsets.bottom + 24.0,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min, 
                     children: [
                       ScaleTransition(
                         scale: _scaleAnimation,
@@ -313,8 +323,7 @@ class _VehicleDetailsFormState extends State<VehicleDetailsForm>
                         ),
                       ),
 
-                      const Spacer(),
-
+                      const SizedBox(height: 20), 
                       _buildAnimatedFormField(
                         delay: 1600,
                         child: SizedBox(
@@ -393,7 +402,11 @@ class _VehicleDetailsFormState extends State<VehicleDetailsForm>
   }
 
   void _showSuccessAndNavigate() {
-    Navigator.push(context, createCustomRoute(RegistrationQuestionForm()));
+    Navigator.push(context, createCustomRoute(RegistrationQuestionForm(
+      questions: RegistrationQuestions.getQuestions(),
+      onFormSubmit: (Map<String, String?> answers) {
+      },
+    )));
   }
 
   Route createCustomRoute(Widget destination) {
@@ -401,7 +414,7 @@ class _VehicleDetailsFormState extends State<VehicleDetailsForm>
       pageBuilder: (context, animation, secondaryAnimation) => destination,
       transitionDuration: const Duration(milliseconds: 600),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        // Slide transition from right to left
+        
         const begin = Offset(1.0, 0.0);
         const end = Offset.zero;
         const curve = Curves.easeInOutCubic;
@@ -411,7 +424,7 @@ class _VehicleDetailsFormState extends State<VehicleDetailsForm>
           end: end,
         ).chain(CurveTween(curve: curve)).animate(animation);
 
-        // Fade transition
+        
         var fadeAnimation = Tween<double>(
           begin: 0.0,
           end: 1.0,
@@ -420,7 +433,7 @@ class _VehicleDetailsFormState extends State<VehicleDetailsForm>
           curve: const Interval(0.0, 0.8, curve: Curves.easeOut),
         ));
 
-        // Scale transition for extra smoothness
+        
         var scaleAnimation = Tween<double>(
           begin: 0.95,
           end: 1.0,
